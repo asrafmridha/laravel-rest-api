@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Validator;
 
 class RegisterController extends BaseController
@@ -21,5 +23,13 @@ class RegisterController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error', $validator->errors());
         }
+
+        $password=Hash::make($request->password);
+
+        $user=User::create([
+            'name'     =>$request->name,
+            'email'    =>$request->email,
+            'password' => $password,
+        ]);
     }
 }
