@@ -23,7 +23,7 @@ class BaseController extends Controller
             'success' => false,
             'message' => $error
         ];
-       //$respon array push a new key named data
+       //$respon array moddhe push a new key named data
         if(!empty($errorMessage)){
             $response['data']=$errorMessage;
         }
