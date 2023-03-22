@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class ProductController extends BaseController
 {
@@ -32,7 +33,13 @@ class ProductController extends BaseController
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'        => 'required|string|max:255',
+            'description' => 'required|string'
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $validator->errors());
+        }
     }
 
     /**
