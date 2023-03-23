@@ -46,7 +46,7 @@ class ProductController extends BaseController
 
         return $this->sendResponse($product, "Product Added Successfully");
         // or
-        // return $this->sendResponse(ProductResource::collection($product) , "Product Added Successfully");   
+        // return $this->sendResponse(ProductResource($product) , "Product Added Successfully");   
     }
 
     /**
@@ -54,7 +54,13 @@ class ProductController extends BaseController
      */
     public function show(string $id)
     {
-        //
+        $product=Product::find($id);
+        
+        if(is_null($product)){
+            return $this->sendError('Product Not Found');
+        }else{
+            return $this->sendResponse(new ProductResource($product),"Product Retrieved");
+        }
     }
 
     /**
