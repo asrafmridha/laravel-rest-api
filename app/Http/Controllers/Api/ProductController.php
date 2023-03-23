@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -37,9 +38,15 @@ class ProductController extends BaseController
             'name'        => 'required|string|max:255',
             'description' => 'required|string'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendError('Validation Error', $validator->errors());
         }
+
+        $product = Product::create($request->all());
+
+        return $this->sendResponse($product, "Product Added Successfully");
+        // or
+        // return $this->sendResponse(ProductResource::collection($product) , "Product Added Successfully");   
     }
 
     /**
