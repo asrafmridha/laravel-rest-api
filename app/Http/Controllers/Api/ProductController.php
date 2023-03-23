@@ -76,26 +76,33 @@ class ProductController extends BaseController
      */
     public function update(Request $request, Product $product)
     {
-            $validator = Validator::make($request->all(), [
-                'name'        => 'required|string|max:255',
-                'description' => 'required|string'
-            ]);
-            if ($validator->fails()) {
-                return $this->sendError('Validation Error', $validator->errors());
-            } else {
-                $product->update($request->all());
-                return $this->sendResponse(new ProductResource($product), "Product Updated Successfully");
+        $validator = Validator::make($request->all(), [
+            'name'        => 'required|string|max:255',
+            'description' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error', $validator->errors());
+        } else {
+            $product->update($request->all());
+            return $this->sendResponse(new ProductResource($product), "Product Updated Successfully");
 
-                // or 
-                // return $this->sendResponse($product, "Product Updated Successfully");
-            }
+            // or 
+            // return $this->sendResponse($product, "Product Updated Successfully");
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+
+        if (is_null($product)) {
+            return $this->sendError('Product Not Found');
+        } else {
+            $product->delete();
+            return $this->sendResponse(new ProductResource($product), "Product Deleted Successfully");
+        }
     }
 }
