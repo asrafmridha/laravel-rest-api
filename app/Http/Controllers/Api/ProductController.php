@@ -46,7 +46,7 @@ class ProductController extends BaseController
 
         return $this->sendResponse($product, "Product Added Successfully");
         // or
-        // return $this->sendResponse(ProductResource($product) , "Product Added Successfully");   
+        // return $this->sendResponse(new ProductResource($product) , "Product Added Successfully");   
     }
 
     /**
@@ -54,12 +54,12 @@ class ProductController extends BaseController
      */
     public function show(string $id)
     {
-        $product=Product::find($id);
-        
-        if(is_null($product)){
+        $product = Product::find($id);
+
+        if (is_null($product)) {
             return $this->sendError('Product Not Found');
-        }else{
-            return $this->sendResponse(new ProductResource($product),"Product Retrieved");
+        } else {
+            return $this->sendResponse(new ProductResource($product), "Product Retrieved");
         }
     }
 
@@ -74,9 +74,21 @@ class ProductController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product)
     {
-        //
+            $validator = Validator::make($request->all(), [
+                'name'        => 'required|string|max:255',
+                'description' => 'required|string'
+            ]);
+            if ($validator->fails()) {
+                return $this->sendError('Validation Error', $validator->errors());
+            } else {
+                $product->update($request->all());
+                return $this->sendResponse(new ProductResource($product), "Product Updated Successfully");
+
+                // or 
+                // return $this->sendResponse($product, "Product Updated Successfully");
+            }
     }
 
     /**
