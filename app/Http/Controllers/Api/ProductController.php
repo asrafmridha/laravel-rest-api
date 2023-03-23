@@ -105,4 +105,10 @@ class ProductController extends BaseController
             return $this->sendResponse(new ProductResource($product), "Product Deleted Successfully");
         }
     }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+        return $this->sendResponse([], "User Logged Out");
+    }
 }
